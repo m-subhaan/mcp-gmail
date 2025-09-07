@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Partner Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'pulse-slow': 'pulse 2s infinite',
+                        'voice-pulse': 'voicePulse 1s ease-in-out infinite',
+                        'voice-wave': 'voiceWave 1.5s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        voicePulse: {
+                            '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+                            '50%': { transform: 'scale(1.1)', opacity: '0.8' }
+                        },
+                        voiceWave: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '25%': { transform: 'scale(1.1)' },
+                            '50%': { transform: 'scale(1.2)' },
+                            '75%': { transform: 'scale(1.1)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-black/20 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-white">
+                            <i class="fas fa-chart-line text-purple-400 mr-2"></i>
+                            Business Partner
+                        </h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 text-sm text-gray-300">
+                        <div id="status-indicator" class="w-2 h-2 bg-green-400 rounded-full animate-pulse-slow"></div>
+                        <span id="status-text">Connected</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Dashboard Header -->
+        <div class="mb-8 animate-fade-in">
+            <h2 class="text-3xl font-bold text-white mb-2">Welcome to Your Business Dashboard</h2>
+            <p class="text-gray-300 text-lg">Your AI-powered business partner is ready to assist you with insights, strategy, and decision-making.</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="mb-8">
+            <div class="border-b border-gray-600">
+                <nav class="-mb-px flex space-x-8">
+                    <button id="chat-tab" class="tab-button active border-b-2 border-purple-400 py-2 px-1 text-sm font-medium text-purple-400 whitespace-nowrap">
+                        <i class="fas fa-comments mr-2"></i>
+                        AI Chat Assistant
+                    </button>
+                    <button id="analytics-tab" class="tab-button border-b-2 border-transparent py-2 px-1 text-sm font-medium text-gray-400 hover:text-gray-300 hover:border-gray-300 whitespace-nowrap">
+                        <i class="fas fa-chart-bar mr-2"></i>
+                        Analytics
+                    </button>
+                    <button id="insights-tab" class="tab-button border-b-2 border-transparent py-2 px-1 text-sm font-medium text-gray-400 hover:text-gray-300 hover:border-gray-300 whitespace-nowrap">
+                        <i class="fas fa-lightbulb mr-2"></i>
+                        Business Insights
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="tab-content" class="animate-fade-in">
+            <!-- Chat Tab -->
+            <div id="chat-content" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    <!-- Chat Interface -->
+                    <div class="lg:col-span-3">
+                        <div class="bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl h-[600px] flex flex-col">
+                            <!-- Chat Header -->
+                            <div class="p-6 border-b border-white/10">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-robot text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-semibold text-white">Claude Assistant</h3>
+                                            <p class="text-sm text-gray-400">Your AI Business Partner</p>
+                                        </div>
+                                    </div>
+                                    <button id="clear-chat" class="text-gray-400 hover:text-white transition-colors">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Chat Messages -->
+                            <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4">
+                                <div class="flex items-start space-x-3 animate-slide-up">
+                                    <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-robot text-white text-sm"></i>
+                                    </div>
+                                    <div class="bg-gray-800/50 rounded-lg px-4 py-3 max-w-md">
+                                        <p class="text-white">Hello! I'm your AI business partner. I'm here to help you with strategy, insights, and decision-making. What would you like to discuss today?</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Chat Input -->
+                            <div class="p-6 border-t border-white/10">
+                                <div class="flex space-x-4">
+                                    <div class="flex-1 relative">
+                                        <input 
+                                            type="text" 
+                                            id="chat-input" 
+                                            placeholder="Ask me anything about your business..." 
+                                            class="w-full px-4 py-3 pr-12 bg-gray-800/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                        />
+                                        <div id="typing-indicator" class="absolute right-3 top-3 hidden">
+                                            <div class="flex space-x-1">
+                                                <div class="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                                                <div class="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                                                <div class="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        id="voice-button" 
+                                        class="px-4 py-3 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+                                        title="Voice input"
+                                    >
+                                        <i id="voice-icon" class="fas fa-microphone"></i>
+                                        <div id="voice-recording-indicator" class="absolute inset-0 bg-red-500/20 hidden animate-pulse"></div>
+                                        <div id="voice-listening-dots" class="absolute inset-0 hidden flex items-center justify-center">
+                                            <div class="flex space-x-1">
+                                                <div class="w-1 h-1 bg-red-400 rounded-full animate-bounce"></div>
+                                                <div class="w-1 h-1 bg-red-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                                                <div class="w-1 h-1 bg-red-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                                            </div>
+                                        </div>
+                                    </button>
+                                    <button 
+                                        id="send-button" 
+                                        class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Sidebar -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 p-6">
+                            <h4 class="text-lg font-semibold text-white mb-4">Quick Actions</h4>
+                            <div class="space-y-3">
+                                <button class="quick-action w-full text-left px-4 py-3 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg text-white transition-colors">
+                                    <i class="fas fa-chart-line text-purple-400 mr-3"></i>
+                                    Analyze Performance
+                                </button>
+                                <button class="quick-action w-full text-left px-4 py-3 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg text-white transition-colors">
+                                    <i class="fas fa-bullseye text-green-400 mr-3"></i>
+                                    Strategic Planning
+                                </button>
+                                <button class="quick-action w-full text-left px-4 py-3 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg text-white transition-colors">
+                                    <i class="fas fa-users text-blue-400 mr-3"></i>
+                                    Team Management
+                                </button>
+                                <button class="quick-action w-full text-left px-4 py-3 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg text-white transition-colors">
+                                    <i class="fas fa-dollar-sign text-yellow-400 mr-3"></i>
+                                    Financial Analysis
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="analytics-content" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-white">Revenue</h3>
+                            <i class="fas fa-arrow-up text-green-400"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-white">$124,500</p>
+                        <p class="text-sm text-gray-400 mt-2">+12% from last month</p>
+                    </div>
+                    
+                    <div class="bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-white">Customers</h3>
+                            <i class="fas fa-users text-blue-400"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-white">2,847</p>
+                        <p class="text-sm text-gray-400 mt-2">+8% from last month</p>
+                    </div>
+                    
+                    <div class="bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-white">Growth Rate</h3>
+                            <i class="fas fa-chart-line text-purple-400"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-white">15.3%</p>
+                        <p class="text-sm text-gray-400 mt-2">Quarterly growth</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insights Tab -->
+            <div id="insights-content" class="tab-content hidden">
+                <div class="space-y-6">
+                    <div class="bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 p-6">
+                        <h3 class="text-xl font-semibold text-white mb-4">
+                            <i class="fas fa-lightbulb text-yellow-400 mr-2"></i>
+                            Business Insights
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                                <h4 class="font-semibold text-blue-300 mb-2">Market Opportunity</h4>
+                                <p class="text-gray-300">Your target market shows 23% growth potential in Q2. Consider expanding your product line.</p>
+                            </div>
+                            <div class="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+                                <h4 class="font-semibold text-green-300 mb-2">Performance</h4>
+                                <p class="text-gray-300">Customer retention has improved by 18%. Your recent service improvements are paying off.</p>
+                            </div>
+                            <div class="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                                <h4 class="font-semibold text-yellow-300 mb-2">Recommendation</h4>
+                                <p class="text-gray-300">Consider investing in digital marketing. Your online conversion rate is 40% below industry average.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
